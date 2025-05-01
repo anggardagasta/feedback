@@ -2,6 +2,7 @@ import {Column, Entity, Index, PrimaryGeneratedColumn} from 'typeorm';
 import {Field, ObjectType, ID, registerEnumType} from '@nestjs/graphql';
 import {FeedbackCategory} from '../enums/feedback-category.enum';
 import {FeedbackStatus} from '../enums/feedback-status.enum';
+import {FeedbackAttachment} from '../schemas/feedback-attachment.schema';
 
 registerEnumType(FeedbackCategory, {
     name: 'FeedbackCategory',
@@ -34,6 +35,9 @@ export class Feedback {
     @Field()
     @Column({type: 'enum', enum: FeedbackStatus, default: FeedbackStatus.PENDING})
     status!: string;
+
+    @Field(() => [FeedbackAttachment], {nullable: true})
+    attachments?: FeedbackAttachment[];
 
     @Field()
     @Column({type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP'})

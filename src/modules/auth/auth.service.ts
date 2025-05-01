@@ -2,7 +2,7 @@ import {Injectable, UnauthorizedException} from '@nestjs/common';
 import {JwtService} from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import {InjectRepository} from '@nestjs/typeorm';
-import {Repository} from 'typeorm';
+import {IsNull, Repository} from 'typeorm';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 
@@ -23,7 +23,12 @@ export class AuthService {
     }
 
     async validateUser(email: string, password: string): Promise<User> {
-        const user = await this.userRepo.findOne({where: {email}});
+        const user = await this.userRepo.findOne({
+            where: {
+                email,
+                deletedAt: IsNull()
+            }
+        });
         if (!user) {
             throw new UnauthorizedException('Invalid user');
         }

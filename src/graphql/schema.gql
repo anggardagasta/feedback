@@ -8,13 +8,87 @@ type LoginResponse {
   role: String!
 }
 
+type FeedbackAttachment {
+  feedbackId: String!
+  url: String!
+  originalFilename: String!
+  mimeType: String!
+}
+
+type Feedback {
+  id: ID!
+  userId: String!
+  content: String!
+  category: String!
+  status: String!
+  attachments: [FeedbackAttachment!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type PaginatedFeedbackResponse {
+  items: [Feedback!]!
+  total: Int!
+  page: Int!
+  limit: Int!
+  pages: Int!
+}
+
 type Query {
   hello: String!
+  getAllFeedback(filter: FeedbackFilterInput, pagination: PaginationInput): PaginatedFeedbackResponse!
+  getFeedback(id: String!): Feedback!
+}
+
+input FeedbackFilterInput {
+  category: FeedbackCategory
+  status: FeedbackStatus
+  startDate: DateTime
+  endDate: DateTime
+}
+
+enum FeedbackCategory {
+  BUG
+  FEATURE
+  GENERAL
+}
+
+enum FeedbackStatus {
+  PENDING
+  REVIEWED
+  RESOLVED
+}
+
+input PaginationInput {
+  page: Int! = 1
+  limit: Int! = 10
+  sortBy: FeedbackSortField! = CREATED_AT
+  sortDirection: SortDirection! = DESC
+}
+
+enum FeedbackSortField {
+  CREATED_AT
+  UPDATED_AT
+  CATEGORY
+  STATUS
+}
+
+enum SortDirection {
+  ASC
+  DESC
 }
 
 type Mutation {
   login(input: LoginInput!): LoginResponse!
   uploadFile(file: Upload!, directory: String = "feedback"): String!
+  createFeedback(input: CreateFeedbackInput!): Feedback!
+  updateFeedback(input: UpdateFeedbackInput!): Feedback!
 }
 
 input LoginInput {
@@ -24,3 +98,15 @@ input LoginInput {
 
 """The `Upload` scalar type represents a file upload."""
 scalar Upload
+
+input CreateFeedbackInput {
+  content: String!
+  category: FeedbackCategory!
+  attachment: Upload
+  directory: String
+}
+
+input UpdateFeedbackInput {
+  id: ID!
+  status: FeedbackStatus
+}

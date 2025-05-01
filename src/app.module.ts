@@ -5,7 +5,7 @@ import {ApolloDriver, ApolloDriverConfig} from '@nestjs/apollo';
 import {MongooseModule} from '@nestjs/mongoose';
 import {join} from 'path';
 import {TypeOrmModule} from '@nestjs/typeorm';
-import { graphqlUploadExpress } from 'graphql-upload';
+import {graphqlUploadExpress} from 'graphql-upload';
 
 import {AppResolver} from './modules/app/app.resolver';
 
@@ -14,6 +14,7 @@ import mongoConfig from './database/mongo.config';
 
 import {AuthModule} from './modules/auth/auth.module';
 import {UploadModule} from './modules/upload/upload.module';
+import {FeedbackModule} from './modules/feedback/feedback.module';
 
 @Module({
     imports: [
@@ -39,6 +40,7 @@ import {UploadModule} from './modules/upload/upload.module';
         // feature modules
         AuthModule,
         UploadModule,
+        FeedbackModule,
     ],
     providers: [
         AppResolver,
