@@ -20,6 +20,13 @@ export const seedUsers = async (dataSource: DataSource) => {
             role: 'ADMIN',
             status: 'ACTIVE',
         },
+        {
+            name: 'User 2',
+            email: 'user2@email.com',
+            password: await bcrypt.hash('user2', 10),
+            role: 'USER',
+            status: 'ACTIVE',
+        },
     ];
 
     for (const userData of users) {

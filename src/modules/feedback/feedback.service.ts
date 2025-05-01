@@ -1,5 +1,5 @@
 import {Injectable, NotFoundException, UnauthorizedException} from '@nestjs/common';
-import {Between, FindOptionsWhere, IsNull, Repository} from 'typeorm';
+import {Between, FindOptionsWhere, IsNull, MoreThanOrEqual, Repository} from 'typeorm';
 import {InjectRepository} from '@nestjs/typeorm';
 import {Feedback} from './entities/feedback.entity';
 import {CreateFeedbackInput} from './dto/create-feedback.input';
@@ -136,5 +136,15 @@ export class FeedbackService {
         }
 
         return feedback;
+    }
+
+    async findUserRecentFeedback(userId: string, thresholdDate: Date): Promise<Feedback | null> {
+        return this.feedbackRepository.findOne({
+            where: {
+                userId: userId,
+                createdAt: MoreThanOrEqual(thresholdDate),
+                deletedAt: IsNull(),
+            },
+        });
     }
 }

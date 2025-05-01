@@ -1,7 +1,9 @@
 import {Injectable} from '@nestjs/common';
 import {InjectRepository} from '@nestjs/typeorm';
-import {Repository} from 'typeorm';
+import {IsNull, Repository} from 'typeorm';
 import {User} from './entities/user.entity';
+import {UserStatus} from "./enums/user-status.enum";
+import {UserRole} from "./enums/user-role.enum";
 
 @Injectable()
 export class UserService {
@@ -9,5 +11,15 @@ export class UserService {
         @InjectRepository(User)
         private readonly userRepository: Repository<User>,
     ) {
+    }
+
+    async getActiveUsers(): Promise<User[]> {
+        return this.userRepository.find({
+            where: {
+                status: UserStatus.ACTIVE,
+                role: UserRole.USER,
+                deletedAt: IsNull(),
+            },
+        });
     }
 }

@@ -15,6 +15,8 @@ import mongoConfig from './database/mongo.config';
 import {AuthModule} from './modules/auth/auth.module';
 import {UploadModule} from './modules/upload/upload.module';
 import {FeedbackModule} from './modules/feedback/feedback.module';
+import {NotificationModule} from './modules/notification/notification.module';
+import {ReminderModule} from './modules/reminder/reminder.module';
 
 @Module({
     imports: [
@@ -41,6 +43,8 @@ import {FeedbackModule} from './modules/feedback/feedback.module';
         AuthModule,
         UploadModule,
         FeedbackModule,
+        NotificationModule,
+        ReminderModule,
     ],
     providers: [
         AppResolver,

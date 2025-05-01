@@ -40,10 +40,33 @@ type PaginatedFeedbackResponse {
   pages: Int!
 }
 
+type Notification {
+  userId: String!
+  type: NotificationType!
+  title: String!
+  message: String!
+  status: NotificationStatus!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""The type of notification"""
+enum NotificationType {
+  FEEDBACK_REMINDER
+  FEEDBACK_STATUS_CHANGE
+}
+
+"""The status of notification"""
+enum NotificationStatus {
+  UNREAD
+  READ
+}
+
 type Query {
   hello: String!
   getAllFeedback(filter: FeedbackFilterInput, pagination: PaginationInput): PaginatedFeedbackResponse!
   getFeedback(id: String!): Feedback!
+  getNotifications(filter: NotificationFilterInput): [Notification!]!
 }
 
 input FeedbackFilterInput {
@@ -82,6 +105,11 @@ enum FeedbackSortField {
 enum SortDirection {
   ASC
   DESC
+}
+
+input NotificationFilterInput {
+  type: NotificationType
+  status: NotificationStatus
 }
 
 type Mutation {
