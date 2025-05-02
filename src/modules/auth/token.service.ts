@@ -63,4 +63,35 @@ export class TokenService {
 
         return dayjs().add(value, unit).toDate();
     }
+
+    async findByToken(token: string): Promise<AccessToken | null> {
+        return this.tokenRepo.findOne({
+            where: { token }
+        });
+    }
+
+    async revokeToken(userId: string): Promise<void> {
+        // Find all valid tokens for this user
+        const tokens = await this.tokenRepo.find({
+            where: {
+                userId,
+                isValid: true,
+            },
+        });
+
+        // Update all tokens to be invalid and set expiredAt to now
+        if (tokens.length > 0) {
+            await Promise.all(
+                tokens.map(token =>
+                    this.tokenRepo.update(
+                        { id: token.id },
+                        {
+                            isValid: false,
+                            expiresAt: new Date()
+                        }
+                    )
+                )
+            );
+        }
+    }
 }

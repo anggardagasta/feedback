@@ -31,6 +31,8 @@ export class AuthService {
 
         const { accessToken, refreshToken, accessTokenExpiresIn } = this.tokenService.generateTokens(payload);
 
+        await this.tokenService.revokeToken(user.id);
+
         await this.tokenService.saveToken(user.id, accessToken, accessTokenExpiresIn);
 
         return {
@@ -38,5 +40,18 @@ export class AuthService {
             refreshToken,
             role: user.role,
         };
+    }
+
+    async logout(userId: string, token: string): Promise<boolean> {
+        // Find the token in the database
+        const accessToken = await this.tokenService.findByToken(token);
+
+        // If token exists and belongs to the user, invalidate it
+        if (accessToken && accessToken.userId === userId) {
+            await this.tokenService.revokeToken(accessToken.id);
+            return true;
+        }
+
+        return false;
     }
 }
