@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+    ports:
+      - "${PORT}:${PORT}"
+    depends_on:
+      - postgres
+      - mongodb
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - PORT=${PORT}
+      - HOST=${HOST}
+      - DB_HOST=postgres
+      - DB_PORT=${DB_PORT}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_DATABASE=${DB_DATABASE}
+      - MONGO_URI=mongodb://mongodb:27017/${DB_DATABASE}
+      - JWT_SECRET=${JWT_SECRET}
+      - ACCESS_TOKEN_EXPIRES=${ACCESS_TOKEN_EXPIRES}
+      - REFRESH_TOKEN_EXPIRES=${REFRESH_TOKEN_EXPIRES}
+      - FEEDBACK_REMINDER_CRON=${FEEDBACK_REMINDER_CRON}
+      - FEEDBACK_REMINDER_DAYS=${FEEDBACK_REMINDER_DAYS}
+  #    command: >
+  #      sh -c "npm run migration:run && npm run seed && npm run start"
+
+  migrations:
+    build:
+      context: .
+    depends_on:
+      - postgres
+      - mongodb
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=${DB_PORT}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_DATABASE=${DB_DATABASE}
+    command: >
+      sh -c "npm run migration:run && npm run seed"
+    restart: "no"  # Run once and exit
+
+  postgres:
+    image: postgres:17
+    ports:
+      - "${DB_PORT}:5432"
+    environment:
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_DATABASE}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+volumes:
+  postgres_data:
+  mongodb_data:
