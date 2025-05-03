@@ -32,14 +32,6 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-type PaginatedFeedbackResponse {
-  items: [Feedback!]!
-  total: Int!
-  page: Int!
-  limit: Int!
-  pages: Int!
-}
-
 type Notification {
   userId: String!
   type: NotificationType!
@@ -60,6 +52,14 @@ enum NotificationType {
 enum NotificationStatus {
   UNREAD
   READ
+}
+
+type PaginatedFeedbackResponse {
+  items: [Feedback!]!
+  total: Int!
+  page: Int!
+  limit: Int!
+  pages: Int!
 }
 
 type Query {
@@ -114,6 +114,7 @@ input NotificationFilterInput {
 
 type Mutation {
   login(input: LoginInput!): LoginResponse!
+  logout: Boolean!
   uploadFile(file: Upload!, directory: String = "feedback"): String!
   createFeedback(input: CreateFeedbackInput!): Feedback!
   updateFeedback(input: UpdateFeedbackInput!): Feedback!

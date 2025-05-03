@@ -1,12 +1,12 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
-import { Field, ObjectType } from '@nestjs/graphql';
+import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose';
+import {Document} from 'mongoose';
+import {Field, ObjectType} from '@nestjs/graphql';
 
 @ObjectType()
-@Schema({ timestamps: true })
+@Schema({timestamps: true})
 export class FeedbackAttachment extends Document {
     @Field()
-    @Prop({ required: true, index: true })
+    @Prop({required: true, index: true})
     feedbackId!: string;
 
     @Field()

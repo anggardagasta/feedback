@@ -27,9 +27,9 @@ export class AuthService {
     }
 
     async login(user: User) {
-        const payload = { sub: user.id, email: user.email, role: user.role };
+        const payload = {sub: user.id, email: user.email, role: user.role};
 
-        const { accessToken, refreshToken, accessTokenExpiresIn } = this.tokenService.generateTokens(payload);
+        const {accessToken, refreshToken, accessTokenExpiresIn} = this.tokenService.generateTokens(payload);
 
         await this.tokenService.revokeToken(user.id);
 

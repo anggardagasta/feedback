@@ -57,15 +57,13 @@ export class FeedbackResolver {
     @Roles(UserRole.ADMIN)
     async updateFeedback(
         @Args('input') updateFeedbackInput: UpdateFeedbackInput,
-        @Context() context: any,
     ): Promise<Feedback> {
-        const userId = context.req.user.id;
-        return this.feedbackService.update(updateFeedbackInput, userId);
+        return this.feedbackService.update(updateFeedbackInput);
     }
 
     @Query(() => PaginatedFeedbackResponse)
     @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles('ADMIN')
+    @Roles(UserRole.ADMIN)
     async getAllFeedback(
         @Args('filter', {nullable: true}) filter: FeedbackFilterInput = {},
         @Args('pagination', {nullable: true}) pagination: PaginationInput = new PaginationInput(),

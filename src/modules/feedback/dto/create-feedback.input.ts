@@ -1,8 +1,8 @@
-import { Field, InputType } from '@nestjs/graphql';
-import { IsEnum, IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
-import { FeedbackCategory } from '../enums/feedback-category.enum';
-import { GraphQLUpload } from 'graphql-upload';
-import { FileUpload } from '../../../types/upload-types';
+import {Field, InputType} from '@nestjs/graphql';
+import {IsEnum, IsNotEmpty, IsOptional, IsString, IsUUID} from 'class-validator';
+import {FeedbackCategory} from '../enums/feedback-category.enum';
+import {GraphQLUpload} from 'graphql-upload';
+import {FileUpload} from '../../../types/upload-types';
 
 @InputType()
 export class CreateFeedbackInput {
@@ -15,11 +15,11 @@ export class CreateFeedbackInput {
     @IsEnum(FeedbackCategory)
     category!: FeedbackCategory;
 
-    @Field(() => GraphQLUpload, { nullable: true })
+    @Field(() => GraphQLUpload, {nullable: true})
     @IsOptional()
     attachment?: Promise<FileUpload>;
 
-    @Field({ nullable: true })
+    @Field({nullable: true})
     @IsString()
     @IsOptional()
     directory?: string;

@@ -8,6 +8,7 @@ import {FeedbackAttachmentService} from './feedback-attachment.service';
 import {FeedbackFilterInput} from './dto/feedback-filter.input';
 import {PaginationInput} from './dto/pagination.input';
 import {PaginatedFeedbackResponse} from './dto/paginated-feedback.response';
+import {NotificationService} from "../notification/notification.service";
 
 @Injectable()
 export class FeedbackService {
@@ -15,6 +16,7 @@ export class FeedbackService {
         @InjectRepository(Feedback)
         private feedbackRepository: Repository<Feedback>,
         private feedbackAttachmentService: FeedbackAttachmentService,
+        private notificationService: NotificationService,
     ) {
     }
 
@@ -44,7 +46,7 @@ export class FeedbackService {
         return savedFeedback;
     }
 
-    async update(updateFeedbackInput: UpdateFeedbackInput, userId: string): Promise<Feedback> {
+    async update(updateFeedbackInput: UpdateFeedbackInput): Promise<Feedback> {
         const feedback = await this.feedbackRepository.findOne({
             where: {
                 id: updateFeedbackInput.id,
@@ -60,7 +62,12 @@ export class FeedbackService {
             feedback.status = updateFeedbackInput.status;
         }
 
-        return this.feedbackRepository.save(feedback);
+        const result =  this.feedbackRepository.save(feedback);
+
+        // Send notification
+        await this.notificationService.createFeedbackStatusChange(feedback.userId, updateFeedbackInput.status);
+
+        return result
     }
 
     async findAll(

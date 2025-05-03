@@ -1,7 +1,7 @@
-import { Injectable, ExecutionContext, UnauthorizedException } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
-import { GqlExecutionContext } from '@nestjs/graphql';
-import { JwtService } from '@nestjs/jwt';
+import {Injectable, ExecutionContext, UnauthorizedException} from '@nestjs/common';
+import {AuthGuard} from '@nestjs/passport';
+import {GqlExecutionContext} from '@nestjs/graphql';
+import {JwtService} from '@nestjs/jwt';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {

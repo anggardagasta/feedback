@@ -1,6 +1,6 @@
-import { Field, ID, InputType } from '@nestjs/graphql';
-import { IsEnum, IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
-import { FeedbackStatus } from '../enums/feedback-status.enum';
+import {Field, ID, InputType} from '@nestjs/graphql';
+import {IsEnum, IsNotEmpty, IsOptional, IsString, IsUUID} from 'class-validator';
+import {FeedbackStatus} from '../enums/feedback-status.enum';
 
 @InputType()
 export class UpdateFeedbackInput {
@@ -9,8 +9,7 @@ export class UpdateFeedbackInput {
     @IsNotEmpty()
     id!: string;
 
-    @Field(() => FeedbackStatus, { nullable: true })
+    @Field(() => FeedbackStatus, {nullable: true})
     @IsEnum(FeedbackStatus)
-    @IsOptional()
-    status?: FeedbackStatus;
+    status!: FeedbackStatus;
 }

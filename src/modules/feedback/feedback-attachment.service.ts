@@ -1,14 +1,15 @@
-import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { FeedbackAttachment } from './schemas/feedback-attachment.schema';
+import {Injectable} from '@nestjs/common';
+import {InjectModel} from '@nestjs/mongoose';
+import {Model} from 'mongoose';
+import {FeedbackAttachment} from './schemas/feedback-attachment.schema';
 
 @Injectable()
 export class FeedbackAttachmentService {
     constructor(
         @InjectModel(FeedbackAttachment.name)
         private feedbackAttachmentModel: Model<FeedbackAttachment>,
-    ) {}
+    ) {
+    }
 
     async create(data: {
         feedbackId: string;
@@ -21,6 +22,6 @@ export class FeedbackAttachmentService {
     }
 
     async findByFeedbackId(feedbackId: string): Promise<FeedbackAttachment[]> {
-        return this.feedbackAttachmentModel.find({ feedbackId }).exec();
+        return this.feedbackAttachmentModel.find({feedbackId}).exec();
     }
 }

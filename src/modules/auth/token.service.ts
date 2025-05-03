@@ -1,10 +1,10 @@
-import { Injectable } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import {Injectable} from '@nestjs/common';
+import {JwtService} from '@nestjs/jwt';
+import {InjectRepository} from '@nestjs/typeorm';
+import {Repository} from 'typeorm';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
-import { AccessToken } from '../access-token/entities/access-token.entity';
+import {AccessToken} from '../access-token/entities/access-token.entity';
 
 dayjs.extend(duration);
 
@@ -14,7 +14,8 @@ export class TokenService {
         @InjectRepository(AccessToken)
         private tokenRepo: Repository<AccessToken>,
         private jwtService: JwtService,
-    ) {}
+    ) {
+    }
 
     generateTokens(payload: { sub: string; email: string; role: string }) {
         const accessTokenExpiresIn = process.env.ACCESS_TOKEN_EXPIRES || '7d';
@@ -27,7 +28,7 @@ export class TokenService {
             expiresIn: refreshTokenExpiresIn,
         });
 
-        return { accessToken, refreshToken, accessTokenExpiresIn };
+        return {accessToken, refreshToken, accessTokenExpiresIn};
     }
 
     async saveToken(userId: string, token: string, expiryString: string): Promise<void> {
@@ -66,7 +67,7 @@ export class TokenService {
 
     async findByToken(token: string): Promise<AccessToken | null> {
         return this.tokenRepo.findOne({
-            where: { token }
+            where: {token}
         });
     }
 
@@ -84,7 +85,7 @@ export class TokenService {
             await Promise.all(
                 tokens.map(token =>
                     this.tokenRepo.update(
-                        { id: token.id },
+                        {id: token.id},
                         {
                             isValid: false,
                             expiresAt: new Date()
